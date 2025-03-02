@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Instagram粉絲分析器</title>
     <style>
         body {
@@ -12,34 +13,58 @@
             padding: 20px;
             color: #262626;
         }
+
         header {
             text-align: center;
             margin-bottom: 30px;
         }
+
         h1 {
             color: #262626;
             margin-bottom: 5px;
         }
+
         .app-description {
             color: #8e8e8e;
             margin-bottom: 20px;
         }
+
+        /* 新增教學影片按鈕樣式 */
+        .video-btn {
+            background-color: #0095f6;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-bottom: 20px;
+        }
+
+        .video-btn:hover {
+            background-color: #0085e0;
+        }
+
         .input-section {
             background-color: #fff;
             border: 1px solid #dbdbdb;
             border-radius: 8px;
             padding: 25px;
             margin-bottom: 25px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
         }
+
         .form-group {
             margin-bottom: 20px;
         }
+
         label {
             display: block;
             margin-bottom: 8px;
             font-weight: bold;
         }
+
         input[type="text"] {
             width: 100%;
             padding: 10px;
@@ -48,6 +73,7 @@
             box-sizing: border-box;
             font-size: 16px;
         }
+
         .upload-container {
             border: 2px dashed #dbdbdb;
             padding: 30px;
@@ -57,19 +83,23 @@
             transition: all 0.3s;
             background-color: #fafafa;
         }
+
         .upload-container:hover {
             border-color: #a8a8a8;
             background-color: #f1f1f1;
         }
+
         .upload-icon {
             margin-bottom: 10px;
             color: #8e8e8e;
         }
+
         .file-info {
             margin-top: 10px;
             font-size: 14px;
             color: #8e8e8e;
         }
+
         .analyze-btn {
             background-color: #0095f6;
             color: white;
@@ -82,44 +112,54 @@
             width: 100%;
             transition: background-color 0.3s;
         }
+
         .analyze-btn:hover {
             background-color: #0085e0;
         }
+
         .analyze-btn:disabled {
             background-color: #b2dffc;
             cursor: not-allowed;
         }
+
         .results-container {
             display: none;
             margin-top: 30px;
         }
+
         .results-tabs {
             display: flex;
             border-bottom: 1px solid #dbdbdb;
             margin-bottom: 20px;
         }
+
         .tab {
             padding: 10px 20px;
             cursor: pointer;
             border-bottom: 2px solid transparent;
             font-weight: bold;
         }
+
         .tab.active {
             border-bottom: 2px solid #0095f6;
             color: #0095f6;
         }
+
         .tab-content {
             display: none;
         }
+
         .tab-content.active {
             display: block;
         }
+
         .user-list {
             max-height: 400px;
             overflow-y: auto;
             border: 1px solid #efefef;
             border-radius: 4px;
         }
+
         .user-item {
             padding: 12px 15px;
             border-bottom: 1px solid #efefef;
@@ -127,24 +167,30 @@
             align-items: center;
             justify-content: space-between;
         }
+
         .user-item:last-child {
             border-bottom: none;
         }
+
         .user-name {
             font-weight: bold;
         }
+
         .user-profile-link {
             color: #0095f6;
             text-decoration: none;
         }
+
         .user-profile-link:hover {
             text-decoration: underline;
         }
+
         .result-summary {
             margin-bottom: 15px;
             font-weight: bold;
             color: #262626;
         }
+
         .export-btn {
             background-color: #262626;
             color: white;
@@ -155,12 +201,15 @@
             cursor: pointer;
             margin-top: 15px;
         }
+
         .export-btn:hover {
             background-color: #1a1a1a;
         }
+
         .hidden {
             display: none !important;
         }
+
         .loading {
             display: flex;
             flex-direction: column;
@@ -168,6 +217,7 @@
             justify-content: center;
             padding: 40px 0;
         }
+
         .spinner {
             border: 4px solid rgba(0, 0, 0, 0.1);
             border-radius: 50%;
@@ -177,76 +227,132 @@
             animation: spin 1s linear infinite;
             margin-bottom: 15px;
         }
+
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
+
         footer {
             margin-top: 50px;
             text-align: center;
             color: #8e8e8e;
             font-size: 14px;
         }
+
+        /* Modal 樣式 */
+        .modal {
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            /* 初始隱藏 */
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(0, 0, 0, 0.6);
+        }
+
+        .modal-content {
+            position: relative;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 800px;
+            width: 90%;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        /* 限制影片高度，避免直式影片超出螢幕 */
+        .modal-content video {
+            max-height: 80vh;
+            width: auto;
+            display: block;
+            margin: 0 auto;
+        }
     </style>
 </head>
+
 <body>
     <header>
         <h1>Instagram粉絲分析器</h1>
         <p class="app-description">找出誰沒有互相追蹤</p>
+        <!-- 教學影片按鈕 -->
+        <button id="videoBtn" class="video-btn">教學影片</button>
     </header>
 
     <div class="input-section">
         <div class="form-group">
             <label for="username">Instagram用戶名稱</label>
-            <input type="text" id="username" placeholder="例如：instagram_user">
+            <input type="text" id="username" placeholder="例如：instagram_user" />
         </div>
-        
+
         <div class="form-group">
             <label for="followersFileInput">上傳粉絲列表 (HTML檔案)</label>
             <div class="upload-container" id="followersUploadContainer">
                 <div class="upload-icon">
                     <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 16L12 8" stroke="#8e8e8e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M9 11L12 8 15 11" stroke="#8e8e8e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M20 16H4" stroke="#8e8e8e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M12 16L12 8" stroke="#8e8e8e" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                        <path d="M9 11L12 8 15 11" stroke="#8e8e8e" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                        <path d="M20 16H4" stroke="#8e8e8e" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" />
                     </svg>
                 </div>
                 <p>點擊或拖放粉絲列表HTML檔案</p>
                 <div class="file-info" id="followersFileInfo"></div>
             </div>
-            <input type="file" id="followersFileInput" class="hidden" accept=".html,.htm">
+            <input type="file" id="followersFileInput" class="hidden" accept=".html,.htm" />
         </div>
-        
+
         <div class="form-group">
             <label for="followingFileInput">上傳追蹤列表 (HTML檔案)</label>
             <div class="upload-container" id="followingUploadContainer">
                 <div class="upload-icon">
                     <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 16L12 8" stroke="#8e8e8e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M9 11L12 8 15 11" stroke="#8e8e8e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M20 16H4" stroke="#8e8e8e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M12 16L12 8" stroke="#8e8e8e" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                        <path d="M9 11L12 8 15 11" stroke="#8e8e8e" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                        <path d="M20 16H4" stroke="#8e8e8e" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" />
                     </svg>
                 </div>
                 <p>點擊或拖放追蹤列表HTML檔案</p>
                 <div class="file-info" id="followingFileInfo"></div>
             </div>
-            <input type="file" id="followingFileInput" class="hidden" accept=".html,.htm">
+            <input type="file" id="followingFileInput" class="hidden" accept=".html,.htm" />
         </div>
-        
+
         <button id="analyzeBtn" class="analyze-btn" disabled>開始分析</button>
     </div>
-    
+
     <div id="loadingIndicator" class="loading hidden">
         <div class="spinner"></div>
         <p>正在分析數據，請稍候...</p>
     </div>
-    
+
     <div id="resultsContainer" class="results-container">
         <div class="results-tabs">
             <div class="tab active" data-tab="notFollowingBack">追蹤你但你沒追蹤的人</div>
             <div class="tab" data-tab="notFollowedBack">你追蹤但沒追蹤你的人</div>
         </div>
-        
+
         <div id="notFollowingBack" class="tab-content active">
             <div class="result-summary">關注你但你沒關注的人：<span id="notFollowingBackCount">0</span> 個用戶</div>
             <div class="user-list" id="notFollowingBackList">
@@ -254,7 +360,7 @@
             </div>
             <button class="export-btn" id="exportNotFollowingBack">導出為JSON</button>
         </div>
-        
+
         <div id="notFollowedBack" class="tab-content">
             <div class="result-summary">你關注但沒關注你的人：<span id="notFollowedBackCount">0</span> 個用戶</div>
             <div class="user-list" id="notFollowedBackList">
@@ -263,42 +369,53 @@
             <button class="export-btn" id="exportNotFollowedBack">導出為JSON</button>
         </div>
     </div>
-    
+
     <footer>
         <p>此工具僅在本地運行，不會上傳您的數據到任何伺服器。</p>
     </footer>
 
+    <!-- Modal 結構，點擊「教學影片」按鈕後彈出 -->
+    <div id="videoModal" class="modal">
+        <div class="modal-content">
+            <span id="closeModal" class="close-button">&times;</span>
+            <video controls style="width: 100%;">
+                <source src="./教學影片.MOV" type="video/quicktime" />
+                您的瀏覽器不支持 video 標籤。
+            </video>
+        </div>
+    </div>
+
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             // 元素參照
             const usernameInput = document.getElementById('username');
             const followersUploadContainer = document.getElementById('followersUploadContainer');
             const followersFileInput = document.getElementById('followersFileInput');
             const followersFileInfo = document.getElementById('followersFileInfo');
-            
+
             const followingUploadContainer = document.getElementById('followingUploadContainer');
             const followingFileInput = document.getElementById('followingFileInput');
             const followingFileInfo = document.getElementById('followingFileInfo');
-            
+
             const analyzeBtn = document.getElementById('analyzeBtn');
             const loadingIndicator = document.getElementById('loadingIndicator');
             const resultsContainer = document.getElementById('resultsContainer');
-            
+
             const tabs = document.querySelectorAll('.tab');
             const tabContents = document.querySelectorAll('.tab-content');
-            
+
             const notFollowingBackCount = document.getElementById('notFollowingBackCount');
             const notFollowingBackList = document.getElementById('notFollowingBackList');
             const exportNotFollowingBack = document.getElementById('exportNotFollowingBack');
-            
+
             const notFollowedBackCount = document.getElementById('notFollowedBackCount');
             const notFollowedBackList = document.getElementById('notFollowedBackList');
             const exportNotFollowedBack = document.getElementById('exportNotFollowedBack');
-            
+
             // 確保載入指示器是隱藏的
             loadingIndicator.classList.add('hidden');
             resultsContainer.style.display = 'none';
-            
+
             // 數據存儲
             let followersData = null;
             let followingData = null;
@@ -306,16 +423,16 @@
                 notFollowingBack: [],
                 notFollowedBack: []
             };
-            
+
             // 處理上傳區域點擊
             followersUploadContainer.addEventListener('click', () => {
                 followersFileInput.click();
             });
-            
+
             followingUploadContainer.addEventListener('click', () => {
                 followingFileInput.click();
             });
-            
+
             // 處理拖放功能
             [followersUploadContainer, followingUploadContainer].forEach(container => {
                 container.addEventListener('dragover', (e) => {
@@ -323,96 +440,96 @@
                     container.style.borderColor = '#0095f6';
                     container.style.backgroundColor = '#e6f4ff';
                 });
-                
+
                 container.addEventListener('dragleave', () => {
                     container.style.borderColor = '#dbdbdb';
                     container.style.backgroundColor = '#fafafa';
                 });
             });
-            
+
             followersUploadContainer.addEventListener('drop', (e) => {
                 e.preventDefault();
                 followersUploadContainer.style.borderColor = '#dbdbdb';
                 followersUploadContainer.style.backgroundColor = '#fafafa';
-                
+
                 if (e.dataTransfer.files.length) {
                     handleFollowersFile(e.dataTransfer.files[0]);
                 }
             });
-            
+
             followingUploadContainer.addEventListener('drop', (e) => {
                 e.preventDefault();
                 followingUploadContainer.style.borderColor = '#dbdbdb';
                 followingUploadContainer.style.backgroundColor = '#fafafa';
-                
+
                 if (e.dataTransfer.files.length) {
                     handleFollowingFile(e.dataTransfer.files[0]);
                 }
             });
-            
+
             // 處理文件選擇
             followersFileInput.addEventListener('change', (e) => {
                 if (e.target.files.length) {
                     handleFollowersFile(e.target.files[0]);
                 }
             });
-            
+
             followingFileInput.addEventListener('change', (e) => {
                 if (e.target.files.length) {
                     handleFollowingFile(e.target.files[0]);
                 }
             });
-            
+
             // 處理粉絲文件
             function handleFollowersFile(file) {
                 if (!file.type.includes('html') && !file.name.endsWith('.html') && !file.name.endsWith('.htm')) {
                     alert('請上傳 HTML 檔案');
                     return;
                 }
-                
+
                 followersFileInfo.textContent = `已選擇: ${file.name}`;
                 followersUploadContainer.style.borderColor = '#0095f6';
-                
+
                 const reader = new FileReader();
-                reader.onload = function(e) {
+                reader.onload = function (e) {
                     const content = e.target.result;
                     followersData = parseHtml(content);
                     checkEnableAnalyzeButton();
                 };
                 reader.readAsText(file);
             }
-            
+
             // 處理追蹤文件
             function handleFollowingFile(file) {
                 if (!file.type.includes('html') && !file.name.endsWith('.html') && !file.name.endsWith('.htm')) {
                     alert('請上傳 HTML 檔案');
                     return;
                 }
-                
+
                 followingFileInfo.textContent = `已選擇: ${file.name}`;
                 followingUploadContainer.style.borderColor = '#0095f6';
-                
+
                 const reader = new FileReader();
-                reader.onload = function(e) {
+                reader.onload = function (e) {
                     const content = e.target.result;
                     followingData = parseHtml(content);
                     checkEnableAnalyzeButton();
                 };
                 reader.readAsText(file);
             }
-            
+
             // 解析HTML並提取連結
             function parseHtml(htmlContent) {
                 const parser = new DOMParser();
                 const doc = parser.parseFromString(htmlContent, 'text/html');
                 const links = doc.querySelectorAll('a');
-                
+
                 const result = [];
-                
+
                 links.forEach(link => {
                     const href = link.getAttribute('href');
                     const text = link.textContent.trim();
-                    
+
                     if (href && text) {
                         result.push({
                             href: href,
@@ -420,10 +537,10 @@
                         });
                     }
                 });
-                
+
                 return result;
             }
-            
+
             // 檢查是否啟用分析按鈕
             function checkEnableAnalyzeButton() {
                 if (followersData && followingData && usernameInput.value.trim()) {
@@ -432,129 +549,150 @@
                     analyzeBtn.disabled = true;
                 }
             }
-            
+
             // 監聽用戶名輸入
             usernameInput.addEventListener('input', checkEnableAnalyzeButton);
-            
+
             // 分析按鈕點擊事件
             analyzeBtn.addEventListener('click', () => {
                 // 顯示載入指示器，隱藏結果容器
                 loadingIndicator.classList.remove('hidden');
                 resultsContainer.style.display = 'none';
-                
+
                 // 模擬處理時間
                 setTimeout(() => {
                     analyzeData();
                     displayResults();
-                    
+
                     // 隱藏載入指示器，顯示結果
                     loadingIndicator.classList.add('hidden');
                     resultsContainer.style.display = 'block';
                 }, 1000);
             });
-            
+
             // 分析數據
             function analyzeData() {
                 // 獲取用戶名列表
                 const followerUsernames = followersData.map(item => item.username);
                 const followingUsernames = followingData.map(item => item.username);
-                
+
                 // 分析"追蹤你但你未追蹤的人"
-                analysisResults.notFollowingBack = followersData.filter(follower => 
+                analysisResults.notFollowingBack = followersData.filter(follower =>
                     !followingUsernames.includes(follower.username)
                 );
-                
+
                 // 分析"你追蹤但未追蹤你的人"
-                analysisResults.notFollowedBack = followingData.filter(following => 
+                analysisResults.notFollowedBack = followingData.filter(following =>
                     !followerUsernames.includes(following.username)
                 );
             }
-            
+
             // 顯示結果
             function displayResults() {
                 // 更新計數
                 notFollowingBackCount.textContent = analysisResults.notFollowingBack.length;
                 notFollowedBackCount.textContent = analysisResults.notFollowedBack.length;
-                
+
                 // 清空列表
                 notFollowingBackList.innerHTML = '';
                 notFollowedBackList.innerHTML = '';
-                
+
                 // 填充"追蹤你但你未追蹤的人"列表
                 if (analysisResults.notFollowingBack.length > 0) {
                     analysisResults.notFollowingBack.forEach(user => {
                         const userItem = document.createElement('div');
                         userItem.className = 'user-item';
                         userItem.innerHTML = `
-                            <span class="user-name">${user.username}</span>
-                            <a href="${user.href}" target="_blank" class="user-profile-link">查看個人檔案</a>
-                        `;
+              <span class="user-name">${user.username}</span>
+              <a href="${user.href}" target="_blank" class="user-profile-link">查看個人檔案</a>
+            `;
                         notFollowingBackList.appendChild(userItem);
                     });
                 } else {
                     notFollowingBackList.innerHTML = '<div class="user-item">沒有找到符合條件的用戶</div>';
                 }
-                
+
                 // 填充"你追蹤但未追蹤你的人"列表
                 if (analysisResults.notFollowedBack.length > 0) {
                     analysisResults.notFollowedBack.forEach(user => {
                         const userItem = document.createElement('div');
                         userItem.className = 'user-item';
                         userItem.innerHTML = `
-                            <span class="user-name">${user.username}</span>
-                            <a href="${user.href}" target="_blank" class="user-profile-link">查看個人檔案</a>
-                        `;
+              <span class="user-name">${user.username}</span>
+              <a href="${user.href}" target="_blank" class="user-profile-link">查看個人檔案</a>
+            `;
                         notFollowedBackList.appendChild(userItem);
                     });
                 } else {
                     notFollowedBackList.innerHTML = '<div class="user-item">沒有找到符合條件的用戶</div>';
                 }
             }
-            
+
             // 標籤切換
             tabs.forEach(tab => {
                 tab.addEventListener('click', () => {
                     const tabId = tab.getAttribute('data-tab');
-                    
+
                     // 移除所有標籤的活動狀態
                     tabs.forEach(t => t.classList.remove('active'));
                     tabContents.forEach(content => content.classList.remove('active'));
-                    
+
                     // 添加當前標籤的活動狀態
                     tab.classList.add('active');
                     document.getElementById(tabId).classList.add('active');
                 });
             });
-            
+
             // 導出結果為JSON
             exportNotFollowingBack.addEventListener('click', () => {
                 exportToJson(analysisResults.notFollowingBack, 'followers_you_dont_follow_back');
             });
-            
+
             exportNotFollowedBack.addEventListener('click', () => {
                 exportToJson(analysisResults.notFollowedBack, 'following_not_following_you_back');
             });
-            
+
             // 導出為JSON檔案
             function exportToJson(data, filename) {
                 const username = usernameInput.value.trim();
                 const jsonData = JSON.stringify(data, null, 2);
                 const blob = new Blob([jsonData], { type: 'application/json' });
                 const url = URL.createObjectURL(blob);
-                
+
                 const a = document.createElement('a');
                 a.href = url;
                 a.download = `${username}_${filename}.json`;
                 document.body.appendChild(a);
                 a.click();
-                
+
                 // 清理
                 setTimeout(() => {
                     document.body.removeChild(a);
                     window.URL.revokeObjectURL(url);
                 }, 0);
             }
+
+            // Modal 播放影片功能
+            const videoBtn = document.getElementById('videoBtn');
+            const videoModal = document.getElementById('videoModal');
+            const closeModal = document.getElementById('closeModal');
+
+            videoBtn.addEventListener('click', function () {
+                videoModal.style.display = 'flex';
+            });
+
+            closeModal.addEventListener('click', function () {
+                videoModal.style.display = 'none';
+            });
+
+            // 點擊 modal 區域以外的內容關閉 modal
+            window.addEventListener('click', function (event) {
+                if (event.target === videoModal) {
+                    videoModal.style.display = 'none';
+                }
+            });
         });
     </script>
 </body>
+
 </html>
